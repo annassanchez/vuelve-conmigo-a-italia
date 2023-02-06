@@ -132,3 +132,5 @@ dmypy.json
 *.zip
 test/
 *.txt
+data/hotels/
+vuelve-conmigo-a-italia.code-workspace
