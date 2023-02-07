@@ -41,3 +41,20 @@ def url(rooms, country, checkin, checkout, adults):
         adults=adults,
     )
 )
+
+def opcionesSelenium():
+    ## opciones selenium
+    opciones= Options()
+    opciones.add_experimental_option('excludeSwitches', ['enable-automation'])
+    #para ocultarme como robot
+    opciones.add_experimental_option('useAutomationExtension', False)
+    opciones.add_argument('--start-maximized') #empezar maximizado
+    opciones.add_argument('user.data-dir=selenium') #guarda las cookies
+    opciones.add_argument('--incognito')#incognito window
+
+def seleniumStart(url_original):
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver.get(url_original)
+    driver.maximize_window()
+    driver.set_window_size(1920, 1080)
+    driver.implicitly_wait(30)
