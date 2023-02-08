@@ -8,3 +8,15 @@ dict_indicatori = {
     'arrivi ':'arrivals',
     'presenze':'nights spent'
 }
+
+list_region = ['Italy', 
+    'Sicilia',
+    'Agrigento', 
+    'Caltanissetta', 
+    'Catania', 
+    'Enna', 
+    'Messina', 
+    'Palermo', 
+    'Ragusa', 
+    'Siracusa',
+    'Trapani']
