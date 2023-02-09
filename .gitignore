@@ -137,3 +137,4 @@ vuelve-conmigo-a-italia.code-workspace
 data/tourism_monthly/
 POIS_Classification.xlsx
 data/tmpOSM_IT/
+*.geojson
