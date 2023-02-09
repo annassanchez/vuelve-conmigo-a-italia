@@ -5,6 +5,27 @@ from selenium.webdriver.chrome.options import Options
 import numpy as np
 from IPython.display import clear_output
 from selenium.webdriver.common.by import By
+import requests
+import re
+from bs4 import BeautifulSoup
+
+def getLinks(url):
+    res = requests.get(url)
+    print(res.status_code)
+    sopa = BeautifulSoup(res.content, 'html.parser')
+    urls_todos = sopa.find_all("tr")
+    resultados = []
+    for item in urls_todos:
+        item = item.text
+        resultados.append(item)
+    patron = r'([\w-]{1,}?-latest-free.shp.zip)'
+    links_final = []
+    for index, item in enumerate(resultados):
+        links_final.append(re.findall(patron, resultados[index]))
+    res_list = []
+    [res_list.append(x) for x in links_final if x not in res_list]
+    flattened = [val for sublist in res_list for val in sublist]
+    return [(url+item) for item in flattened], flattened
 
 def url(rooms, country, checkin, checkout, adults):
     return str(
