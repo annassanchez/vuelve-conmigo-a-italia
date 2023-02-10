@@ -75,6 +75,142 @@ def opcionesSelenium():
     opciones.add_argument('user.data-dir=selenium') #guarda las cookies
     opciones.add_argument('--incognito')#incognito window
 
+def seleniumChromeBooking_1st(list_url,list_dates, dia, almacen):
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver.get(list_url[dia])
+    driver.maximize_window()
+    driver.set_window_size(1920, 1080)
+    driver.implicitly_wait(30)
+    driver.find_element('css selector', '#onetrust-accept-btn-handler').click()
+    try:
+        try:
+            for i in range(3, 50):
+                print('item:', i)
+                try:
+                    try:
+                        name = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a/div[1]'.format(i=i)).text
+                        previousPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div[1]/span/div/span[1]'.format(i=i)).text
+                        currentPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div[1]/span/div/span[2]'.format(i=i)).text
+                        rating = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[1]'.format(i=i)).text
+                        reviewNumber = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[2]/div[2]'.format(i=i)).text
+                        image = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[1]/div/a/img'.format(i=i)).get_attribute('src')
+                        driver.find_element('xpath', f'//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a').click()
+                    except:
+                        name = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a/div[1]'.format(i=i)).text
+                        try:
+                            previousPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div/span/div/span[1]'.format(i=i)).text
+                            currentPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div/span/div/span[2]'.format(i=i)).text
+                        except:
+                            previousPrice = np.nan
+                            currentPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[2]/div[2]/div/div[1]/span'.format(i=i)).text
+                        rating = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[1]'.format(i=i)).text
+                        reviewNumber = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[2]/div[2]'.format(i=i)).text
+                        image = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[1]/div/a/img'.format(i=i)).get_attribute('src')
+                        driver.find_element('xpath', f'//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[2]/div[2]/div/div[2]/a').click()
+                    driver.switch_to.window(driver.window_handles[1])
+                    time.sleep(5)
+                    url = driver.current_url
+                    almacen['url'].append(url)
+                    res = requests.get(url)
+                    soup = BeautifulSoup(res.content, 'html.parser')
+                    pagina = soup.text
+                    almacen['pagina'].append(pagina)
+                    almacen['address'].append(re.findall('(.*, \d{3,5} .*)', pagina.lower()))
+                    print('dict:', len(almacen['url']), len(almacen['pagina']))
+                    driver.close()
+                    driver.switch_to.window(driver.window_handles[0])
+                    almacen['name'].append(name)
+                    almacen['previousPrice'].append(previousPrice)
+                    almacen['currentPrice'].append(currentPrice)
+                    almacen['rating'].append(rating)
+                    almacen['reviewNumber'].append(reviewNumber)
+                    almacen['image'].append(image)
+                    almacen['checkingDate'].append(list_dates[dia])
+                    print(len(almacen['name']), len(almacen['url']), len(almacen['currentPrice']), len(almacen['previousPrice']))
+                    clear_output(wait=True)
+                except:
+                    pass
+                clear_output
+        # driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[4]/div[2]/nav/div/div[3]/button').click()
+        # driver.implicitly_wait(2)
+        # clear_output(wait=True)
+        except:
+            pass
+    except:
+        print('me rompí')
+
+def seleniumChromeBooking(list_url, list_dates, dia, almacen):
+    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver.get(list_url[dia])
+    driver.maximize_window()
+    driver.set_window_size(1920, 1080)
+    driver.implicitly_wait(30)
+    driver.find_element('css selector', '#onetrust-accept-btn-handler').click()
+    try:
+        for page in range (1,40):
+            try:
+                for i in range(3, 50):
+                    print('item:', i, 'page:', page)
+                    print(driver.current_window_handle)
+                    try:
+                        try:
+                            name = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a/div[1]'.format(i=i)).text
+                            previousPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div[1]/span/div/span[1]'.format(i=i)).text
+                            currentPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div[1]/span/div/span[2]'.format(i=i)).text
+                            rating = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[1]'.format(i=i)).text
+                            reviewNumber = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[2]/div[2]'.format(i=i)).text
+                            image = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[1]/div/a/img'.format(i=i)).get_attribute('src')
+                            driver.find_element('xpath', f'//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a').click()
+                        except:
+                            name = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a/div[1]'.format(i=i)).text
+                            try:
+                                previousPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div/span/div/span[1]'.format(i=i)).text
+                                currentPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[3]/div[2]/div/div/span/div/span[2]'.format(i=i)).text
+                            except:
+                                previousPrice = np.nan
+                                currentPrice = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[2]/div[2]/div/div[1]/span'.format(i=i)).text
+                            rating = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[1]'.format(i=i)).text
+                            reviewNumber = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[2]/div[2]'.format(i=i)).text
+                            image = driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[1]/div/a/img'.format(i=i)).get_attribute('src')
+                            driver.find_element('xpath', f'//*[@id="search_results_table"]/div[2]/div/div/div/div[3]/div[{i}]/div[1]/div[2]/div/div[2]/div[2]/div/div[2]/a').click()
+                        before = driver.window_handles[0]
+                        after = driver.window_handles[-1]
+                        time.sleep(7)
+                        driver.switch_to.window(after)
+                        print(driver.current_window_handle)
+                        driver.implicitly_wait(15)
+                        url = driver.current_url
+                        almacen['url'].append(url)
+                        res = requests.get(url)
+                        soup = BeautifulSoup(res.content, 'html.parser')
+                        pagina = soup.text
+                        almacen['pagina'].append(pagina)
+                        almacen['address'].append(re.findall('(.*, \d{3,5} .*)', pagina.lower()))
+                        print('dict:', len(almacen['url']), len(almacen['pagina']))
+                        driver.close()
+                        driver.switch_to.window(before)
+                        almacen['name'].append(name)
+                        almacen['previousPrice'].append(previousPrice)
+                        almacen['currentPrice'].append(currentPrice)
+                        almacen['rating'].append(rating)
+                        almacen['reviewNumber'].append(reviewNumber)
+                        almacen['image'].append(image)
+                        almacen['checkingDate'].append(list_dates[dia])
+                        print(len(almacen['name']), len(almacen['url']), len(almacen['currentPrice']), len(almacen['previousPrice']))
+                        clear_output(wait=True)
+                    except:
+                        pass
+                    clear_output
+                driver.find_element('xpath', '//*[@id="search_results_table"]/div[2]/div/div/div/div[4]/div[2]/nav/div/div[3]/button').click()
+                print(len(almacen['name']), len(almacen['url']), len(almacen['currentPrice']), len(almacen['previousPrice']))
+                clear_output(wait=True)
+                with open(f'../data/dict_booking_{dia}.pickle', 'wb') as data_scrapeado:
+                    pickle.dump(almacen, data_scrapeado)
+            except:
+                pass
+    except:
+        print('me rompí')
+    
 def seleniumFirefoxBooking(list_url, list_dates, dia, almacen):
     driver = webdriver.Firefox()
     driver.get(list_url[dia])
@@ -114,7 +250,6 @@ def seleniumFirefoxBooking(list_url, list_dates, dia, almacen):
                         driver.switch_to.window(driver.window_handles[1])
                         time.sleep(7)
                         url = driver.current_url
-                        print(url, driver.title)
                         almacen['url'].append(url)
                         res = requests.get(url)
                         soup = BeautifulSoup(res.content, 'html.parser')
