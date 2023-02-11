@@ -138,3 +138,5 @@ data/tourism_monthly/
 POIS_Classification.xlsx
 data/tmpOSM_IT/
 *.geojson
+imagenes/refs/
+data/pickle/
