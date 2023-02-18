@@ -28,7 +28,8 @@ The aim of this porject is to create a dashboard about a topic of choice, after 
 
 After watching the season 2 of the HBO series `White Lotus` I was heavily influenced to spend my summer vacations in Sicily. So I created a [dashboard](https://public.tableau.com/app/profile/anna1413/viz/sicily/01) in order to plan my trip, adding information on tourim in the island, the hotel listing prices and the relevant landmarks that might be worth seeing.  
 
-![dashboard]()
+![dashboard](imagenes/listings_map.png)
+![dashboard](imagenes/pois_map.png)
 
 The action distributes between Taormina, Noto, Testa dell'Acqua, Palermo and finally Catania. The dashboard includes a filter that sorts the info in order to see what data, listings or points of interest are available on those locations, in order to reenact the landscapes in which the series was filmed.
 
